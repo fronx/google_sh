@@ -5,15 +5,15 @@ require 'uri'
 require 'hpricot'
 require 'htmlentities'
 
-def url_escape(string)
-  string.gsub(/([^ a-zA-Z0-9_.-]+)/n) do
-  '%' + $1.unpack('H2' * $1.size).join('%').upcase
-  end.tr(' ', '+')
-end
-
 class String
   def strip_tags
     self.gsub(/<[^<>]+>/,'')
+  end
+  
+  def url_escape
+    self.gsub(/([^ a-zA-Z0-9_.-]+)/n) do
+    '%' + $1.unpack('H2' * $1.size).join('%').upcase
+    end.tr(' ', '+')
   end
   
   def green
@@ -64,7 +64,11 @@ class Google
   private
   
   def to_query(terms)
-    (terms || []).map { |t| url_escape(t) }.join('+')
+    (terms || []).map { |t| to_param(t) }.join('+')
+  end
+  
+  def to_param(term)
+    (term.count(' ') > 0 ? %Q{"#{term}"} : term).url_escape 
   end
 end
 
