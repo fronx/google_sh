@@ -96,9 +96,12 @@ end
 
 g = Google.new
 g.search($*)
-count = g.results.size
-g.results.reverse.each_with_index do |r, i|
-  puts "(#{count - i}) " + r.to_s + "\n\n"
+if g.quick_result.yellow
+  puts g.quick_result.yellow
+else
+  count = g.results.size
+  g.results.reverse.each_with_index do |r, i|
+    puts "(#{count - i}) " + r.to_s + "\n\n"
+  end
 end
-puts g.quick_result.yellow if g.quick_result
 puts g.search_url($*)
