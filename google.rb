@@ -67,7 +67,7 @@ class Google
         SearchResult.new(
           :href => href,
           :title => prepare(result.at(:h3)),
-          :description => prepare(result.at('div.s'))
+          :description => prepare(result.at('div'))
         )
       end
     end.compact
@@ -80,7 +80,8 @@ class Google
   private
   
   def prepare(str)
-    @coder.decode( str.inner_html.replace_tag(:em) { |keyword| keyword.red }.strip_tags )
+    return '' unless str
+    @coder.decode(str.inner_html.replace_tag(:em) { |keyword| keyword.red }.strip_tags )
   end
   
   def to_query(terms)
