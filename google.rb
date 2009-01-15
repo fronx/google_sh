@@ -52,7 +52,7 @@ class Google
 
   def search(terms)
     page = Hpricot(open(search_url(terms)))
-    @quick_result = (page/:table/'h2.r').inner_html.strip_tags
+    @quick_result = (page/:table/'h2.r').inner_html.strip_tags rescue nil
     @results = (page/'li.g').map do |result|
       if href = (result/:h3/'a.l').first.attributes['href'] rescue nil
         SearchResult.new(
@@ -100,5 +100,5 @@ count = g.results.size
 g.results.reverse.each_with_index do |r, i|
   puts "(#{count - i}) " + r.to_s + "\n\n"
 end
-puts g.quick_result.yellow
+puts g.quick_result.yellow if g.quick_result
 puts g.search_url($*)
