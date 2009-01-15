@@ -5,17 +5,21 @@ a google client for the command line.
 == usage example
 
 google rails
-=>
-...
-(1) Ruby on Rails
-    http://rubyonrails.org/
-    RoR home; full stack, Web application framework optimized
-    for sustainable programming productivity, allows writing
-    sound code by favoring convention over ...rubyonrails.org/
+=> ...
+   (1) Ruby on Rails
+       http://rubyonrails.org/
 
-http://www.google.com/search?q=rails
+(in iterm the links can be opened by cmd + click.)
 
-in iterm the links can be opened by cmd + click.
+google 4$ in eur
+=> 4 US$ = 3.03697517 Euros
+
+google "stairway to heaven" lyrics
+=> ...
+   (1) Led Zeppelin | Stairway  To Heaven lyrics
+       http://www.lyricsfreak.com/l/led+zeppelin/stairway+to+heaven_20082076.html
+       Stairway To Heaven lyrics by Led Zeppelin. ... Ooh,
+       ooh, and shes buying a stairway to heaven. Theres a...
 
 == dependencies
 
