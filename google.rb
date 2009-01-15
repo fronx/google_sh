@@ -21,15 +21,15 @@ class String
   end
   
   def green
-    "\033[0;32m" + self + "\033[1;37m"
+    "\033[0;32m" + self + "\033[0m"
   end
 
   def red
-    "\033[0;31m" + self + "\033[1;37m"
+    "\033[0;31m" + self + "\033[0m"
   end
 
   def yellow
-    "\033[0;33m" + self + "\033[1;37m"
+    "\033[0;33m" + self + "\033[0m"
   end
   
   def with_line_length(max_length)
