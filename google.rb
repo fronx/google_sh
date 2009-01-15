@@ -66,8 +66,8 @@ class Google
       if href = (result/:h3/'a.l').first.attributes['href'] rescue nil
         SearchResult.new(
           :href => href,
-          :title => @coder.decode( result.at(:h3).inner_html.replace_tag(:em) { |keyword| keyword.red }.strip_tags ),
-          :description => @coder.decode( result.at('div.s').inner_html.replace_tag(:em) { |keyword| keyword.red }.strip_tags )
+          :title => prepare(result.at(:h3)),
+          :description => prepare(result.at('div.s'))
         )
       end
     end.compact
@@ -78,6 +78,10 @@ class Google
   end
   
   private
+  
+  def prepare(str)
+    @coder.decode( str.inner_html.replace_tag(:em) { |keyword| keyword.red }.strip_tags )
+  end
   
   def to_query(terms)
     (terms || []).map { |t| to_param(t) }.join('+')
