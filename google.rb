@@ -10,6 +10,10 @@ class String
     self.gsub(/<[^<>]+>/,'')
   end
   
+  def replace_tag(tag, &block)
+    self.gsub(/<#{tag}>([^<>]+)<\/#{tag}>/) { |match| yield $1 }
+  end
+  
   def url_escape
     self.gsub(/([^ a-zA-Z0-9_.-]+)/n) do
     '%' + $1.unpack('H2' * $1.size).join('%').upcase
@@ -18,6 +22,10 @@ class String
   
   def green
     "\033[0;32m" + self + "\033[1;37m"
+  end
+
+  def red
+    "\033[0;31m" + self + "\033[1;37m"
   end
 
   def yellow
@@ -58,8 +66,8 @@ class Google
       if href = (result/:h3/'a.l').first.attributes['href'] rescue nil
         SearchResult.new(
           :href => href,
-          :title => @coder.decode( result.at(:h3).inner_html.strip_tags ),
-          :description => @coder.decode( result.at('div.s').inner_html.strip_tags )
+          :title => @coder.decode( result.at(:h3).inner_html.replace_tag(:em) { |keyword| keyword.red }.strip_tags ),
+          :description => @coder.decode( result.at('div.s').inner_html.replace_tag(:em) { |keyword| keyword.red }.strip_tags )
         )
       end
     end.compact
