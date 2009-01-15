@@ -19,6 +19,10 @@ class String
   def green
     "\033[0;32m" + self + "\033[1;37m"
   end
+
+  def yellow
+    "\033[0;33m" + self + "\033[1;37m"
+  end
   
   def with_line_length(max_length)
     words = split(' ')
@@ -36,6 +40,8 @@ class String
 end
 
 class Google
+  attr_reader :results, :quick_result
+  
   def self.root_url
     'http://www.google.com/search?q='
   end
@@ -46,7 +52,8 @@ class Google
 
   def search(terms)
     page = Hpricot(open(search_url(terms)))
-    (page/"li.g").map do |result|
+    @quick_result = (page/:table/'h2.r').inner_html.strip_tags
+    @results = (page/'li.g').map do |result|
       if href = (result/:h3/'a.l').first.attributes['href'] rescue nil
         SearchResult.new(
           :href => href,
@@ -88,9 +95,10 @@ class SearchResult
 end
 
 g = Google.new
-results = g.search($*)
-count = results.size
-results.reverse.each_with_index do |r, i|
+g.search($*)
+count = g.results.size
+g.results.reverse.each_with_index do |r, i|
   puts "(#{count - i}) " + r.to_s + "\n\n"
 end
+puts g.quick_result.yellow
 puts g.search_url($*)
