@@ -58,7 +58,7 @@ class Google
     @coder = HTMLEntities.new
   end
 
-  def search(terms)
+  def search(terms, options = {})
     page = Hpricot(open(search_url(terms)))
     @quick_result = (page/:table/'h2.r').inner_html.strip_tags rescue nil
     @quick_result = nil if @quick_result.length == 0
@@ -71,6 +71,11 @@ class Google
         )
       end
     end.compact
+    if options[:open_first] == true
+      `open #{@results.first.href}`
+    else
+      @result
+    end
   end
   
   def search_url(terms)
@@ -108,8 +113,15 @@ class SearchResult
   end
 end
 
+search_terms = $*
+options = {}
+if search_terms.first == '1'
+  options[:open_first] = true
+  search_terms.shift
+end
+
 g = Google.new
-g.search($*)
+g.search(search_terms, options)
 if g.quick_result
   puts g.quick_result.yellow
 else
