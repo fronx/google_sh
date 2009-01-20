@@ -4,6 +4,7 @@ require 'open-uri'
 require 'uri'
 require 'hpricot'
 require 'htmlentities'
+require 'tempfile'
 
 class String
   def strip_tags
@@ -59,7 +60,10 @@ class Google
   end
 
   def search(terms, options = {})
-    page = Hpricot(open(search_url(terms)))
+    tmp_file = Tempfile.new('google_results').path
+    File.open(tmp_file, 'w') { |f| f.write(open(search_url(terms)).read) }
+    `tidy -u -m #{tmp_file} &>/dev/null`
+    page = Hpricot(File.read(tmp_file))
     @quick_result = (page/:table/'h2.r').inner_html.strip_tags rescue nil
     @quick_result = nil if @quick_result.length == 0
     @results = (page/'li.g').map do |result|
