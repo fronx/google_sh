@@ -3,7 +3,6 @@ require 'rubygems'
 require 'open-uri'
 require 'hpricot'
 require 'htmlentities'
-require 'tempfile'
 require 'iconv'
 
 class String
